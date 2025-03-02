@@ -7,26 +7,42 @@ import 'package:techcontrol/view/home/home_page.dart';
 
 class RoutersApp {
   final GoRouter routesConfig = GoRouter(
-    initialLocation: '/',
+    initialLocation: '/login',
     redirect: (context, state) {
-      final session = Supabase.instance.client.auth.currentSession;
-      return (session != null) ? '/home' : '/login';
-    },
+  final session = Supabase.instance.client.auth.currentSession;
+  final isLoggingIn = state.matchedLocation == '/login';
+  final isSigningUp = state.matchedLocation == '/cadastro';
+
+  // Se a sessão ainda está carregando, não faz nada (evita redirecionamento prematuro)
+  if (session == null && !isLoggingIn && !isSigningUp) {
+    return '/login';
+  }
+
+  // Se o usuário está logado e tenta acessar login ou cadastro, redireciona para home
+  if (session != null && (isLoggingIn || isSigningUp)) {
+    return '/home';
+  }
+
+  return null; // Permite navegação normal
+},
+
+
     routes: <RouteBase>[
       GoRoute(
         path: '/login',
+        name: 'login',
         builder: (BuildContext context, GoRouterState state) {
           return const SignInPage();
         },
       ),
       GoRoute(
         path: '/cadastro',
-        builder: (BuildContext context, GoRouterState state) {
-          return const SignUpPage();
-        },
+        name: 'cadastro',
+        builder: (BuildContext context, GoRouterState state) => SignUpPage(),
       ),
       GoRoute(
         path: '/home',
+        name: 'home',
         builder: (BuildContext context, GoRouterState state) {
           return const HomePage();
         },

@@ -1,5 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:techcontrol/app/theme.dart';
 import 'package:techcontrol/helpers/validators.dart';
@@ -59,9 +60,11 @@ class _SignInPageState extends State<SignInPage> with ValidationMixinClass {
                             ),
                           ),
                           TextFormFieldWidget(
-                            autofocus: true,
+                            autofocus: false,
                             controller: _emailController,
-                            inputBorderType: OutlineInputBorder(),
+                            inputBorderType: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
                             inputType: TextInputType.emailAddress,
                             obscure: false,
                             sizeInputBorder: 2.0,
@@ -91,9 +94,11 @@ class _SignInPageState extends State<SignInPage> with ValidationMixinClass {
                             ),
                           ),
                           TextFormFieldWidget(
-                            autofocus: true,
+                            autofocus: false,
                             controller: _passwordController,
-                            inputBorderType: OutlineInputBorder(),
+                            inputBorderType: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
                             inputType: TextInputType.emailAddress,
                             obscure: _obscurePassword,
                             sizeInputBorder: 2.0,
@@ -120,6 +125,16 @@ class _SignInPageState extends State<SignInPage> with ValidationMixinClass {
                                 ]),
                           ),
                         ],
+                      ),
+                      Builder(
+                        builder: (context) {
+                          return ElevatedButton(
+                            onPressed: () {
+                              context.push('/cadastro');
+                            },
+                            child: Text('Cadastrar'),
+                          );
+                        },
                       ),
                     ],
                   ),

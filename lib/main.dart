@@ -8,7 +8,7 @@ Future<void> main() async {
   await dotenv.load(fileName: ".env");
   await Supabase.initialize(
     url: dotenv.env['SUPABASE_URL_DATABASE']!,
-    anonKey: dotenv.env['SUPABASE_API_KEY']!,
+    anonKey: dotenv.env['SUPABASE_API_KEY_SECRET']!,
   );
   runApp(const MyApp());
 }

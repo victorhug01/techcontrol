@@ -23,10 +23,43 @@ class AuthViewModel extends ChangeNotifier {
       }
     } catch (e) {
       if (context.mounted) {
-        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Email ou senha inválidos!")));
         SnackbarService.showDetails(
           context,
           "Email ou senha inválidos!",
+          AppTheme.lightTheme.colorScheme.error,
+        );
+      }
+      
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> signUp(String email, String password, BuildContext context) async {
+    try {
+      isLoading = true;
+      notifyListeners();
+      final response = await _supabaseService.signUp(email, password);
+
+      if (response.session != null) {
+        
+        if (context.mounted) {
+          SnackbarService.showDetails(
+          context,
+          "Email ou senha inválidos!",
+          Colors.green,
+        );
+          context.go('/login');
+        }
+      } else {
+        throw Exception("Falha ao autenticar");
+      }
+    } catch (e) {
+      if (context.mounted) {
+        SnackbarService.showDetails(
+          context,
+          e.toString(),
           AppTheme.lightTheme.colorScheme.error,
         );
       }
