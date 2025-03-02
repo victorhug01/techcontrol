@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:techcontrol/app/theme.dart';
 import 'package:techcontrol/helpers/validators.dart';
-import 'package:techcontrol/viewmodel/auth_viewmodel.dart';
+import 'package:techcontrol/model/sign_up_model.dart';
+import 'package:techcontrol/viewmodel/sign_up_viewmodel.dart';
 import 'package:techcontrol/widgets/button_widget.dart';
 import 'package:techcontrol/widgets/textformfield_widget.dart';
 
@@ -23,7 +24,7 @@ class _SignUpPageState extends State<SignUpPage> with ValidationMixinClass {
 
   @override
   Widget build(BuildContext context) {
-    final authViewModel = Provider.of<AuthViewModel>(context);
+    final signInViewModel = Provider.of<SignUpViewModel>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.lightTheme.colorScheme.primary,
@@ -185,7 +186,7 @@ class _SignUpPageState extends State<SignUpPage> with ValidationMixinClass {
                   child: ButtonWidget(
                     color: AppTheme.lightTheme.colorScheme.secondary,
                     title:
-                        authViewModel.isLoading
+                        signInViewModel.isLoading
                             ? CircularProgressIndicator(
                               color: AppTheme.lightTheme.colorScheme.primary,
                             )
@@ -201,9 +202,11 @@ class _SignUpPageState extends State<SignUpPage> with ValidationMixinClass {
                     width: 1.7,
                     onPressed: () async {
                       if (_signUpKeyForm.currentState!.validate()) {
-                        await authViewModel.signUp(
-                          _emailController.text,
-                          _passwordController.text,
+                        await signInViewModel.signUp(
+                          SignUpModel(
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                          ),
                           context,
                         );
                       }

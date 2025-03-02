@@ -4,7 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:techcontrol/app/theme.dart';
 import 'package:techcontrol/helpers/validators.dart';
-import 'package:techcontrol/viewmodel/auth_viewmodel.dart';
+import 'package:techcontrol/model/sign_in_model.dart';
+import 'package:techcontrol/viewmodel/sign_in_viewmodel.dart';
 import 'package:techcontrol/widgets/button_widget.dart';
 import 'package:techcontrol/widgets/textformfield_widget.dart';
 
@@ -23,7 +24,7 @@ class _SignInPageState extends State<SignInPage> with ValidationMixinClass {
 
   @override
   Widget build(BuildContext context) {
-    final authViewModel = Provider.of<AuthViewModel>(context);
+    final signInViewModel = Provider.of<SignInViewModel>(context);
     return Scaffold(
       backgroundColor: AppTheme.lightTheme.primaryColor,
       body: SafeArea(
@@ -34,7 +35,7 @@ class _SignInPageState extends State<SignInPage> with ValidationMixinClass {
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage('assets/images/image_background.jpg'),
-              fit: BoxFit.cover,
+              fit: BoxFit.fill,
             ),
           ),
           child: Column(
@@ -146,7 +147,7 @@ class _SignInPageState extends State<SignInPage> with ValidationMixinClass {
                   child: ButtonWidget(
                     color: AppTheme.lightTheme.colorScheme.secondary,
                     title:
-                        authViewModel.isLoading
+                        signInViewModel.isLoading
                             ? CircularProgressIndicator(
                               color: AppTheme.lightTheme.colorScheme.primary,
                             )
@@ -162,9 +163,11 @@ class _SignInPageState extends State<SignInPage> with ValidationMixinClass {
                     width: 1.7,
                     onPressed: () async {
                       if (_signInKeyForm.currentState!.validate()) {
-                        await authViewModel.signIn(
-                          _emailController.text,
-                          _passwordController.text,
+                        await signInViewModel.signIn(
+                          SignInModel(
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                          ),
                           context,
                         );
                       }
