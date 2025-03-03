@@ -26,7 +26,7 @@ class _SignUpPageState extends State<SignUpPage> with ValidationMixinClass {
   @override
   Widget build(BuildContext context) {
     final signInViewModel = Provider.of<SignUpViewModel>(context);
-    final response = ResponsiveUtils(context).height;
+    final responsive = ResponsiveUtils(context).height;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.lightTheme.colorScheme.secondary,
@@ -53,15 +53,15 @@ class _SignUpPageState extends State<SignUpPage> with ValidationMixinClass {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: response / 8,
                   children: [
-                    Image.asset('assets/images/write_techcontrol.png'),
                     Column(
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           spacing: 3.0,
                           children: [
+                            Center(child: Image.asset('assets/images/write_techcontrol.png')),
+                            SizedBox(height: responsive / 6),
                             Text(
                               'Email',
                               style: TextStyle(
@@ -184,39 +184,40 @@ class _SignUpPageState extends State<SignUpPage> with ValidationMixinClass {
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: ButtonWidget(
-                        color: AppTheme.lightTheme.colorScheme.secondary,
-                        title:
-                            signInViewModel.isLoading
-                                ? CircularProgressIndicator(
-                                  color: AppTheme.lightTheme.colorScheme.primary,
-                                )
-                                : Text(
-                                  'Cadastrar',
-                                  style: TextStyle(
-                                    color: AppTheme.lightTheme.colorScheme.onSurface,
-                                    fontSize: TextTheme.of(context).headlineSmall!.fontSize,
+                        SizedBox(height: responsive / 10),
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: ButtonWidget(
+                            color: AppTheme.lightTheme.colorScheme.secondary,
+                            title:
+                                signInViewModel.isLoading
+                                    ? CircularProgressIndicator(
+                                      color: AppTheme.lightTheme.colorScheme.primary,
+                                    )
+                                    : Text(
+                                      'Cadastrar',
+                                      style: TextStyle(
+                                        color: AppTheme.lightTheme.colorScheme.onSurface,
+                                        fontSize: TextTheme.of(context).headlineSmall!.fontSize,
+                                      ),
+                                    ),
+                            radius: 15.0,
+                            height: 55.0,
+                            width: 1.7,
+                            onPressed: () async {
+                              if (_signUpKeyForm.currentState!.validate()) {
+                                await signInViewModel.signUp(
+                                  SignUpModel(
+                                    email: _emailController.text,
+                                    password: _passwordController.text,
                                   ),
-                                ),
-                        radius: 15.0,
-                        height: 55.0,
-                        width: 1.7,
-                        onPressed: () async {
-                          if (_signUpKeyForm.currentState!.validate()) {
-                            await signInViewModel.signUp(
-                              SignUpModel(
-                                email: _emailController.text,
-                                password: _passwordController.text,
-                              ),
-                              context,
-                            );
-                          }
-                        },
-                      ),
+                                  context,
+                                );
+                              }
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

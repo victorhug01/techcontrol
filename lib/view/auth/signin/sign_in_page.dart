@@ -85,7 +85,6 @@ class _SignInPageState extends State<SignInPage> with ValidationMixinClass {
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        spacing: 3.0,
                         children: [
                           Text(
                             'Senha',
@@ -125,17 +124,23 @@ class _SignInPageState extends State<SignInPage> with ValidationMixinClass {
                                   () => maxTwoHundredCharacters(value),
                                 ]),
                           ),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: GestureDetector(
+                              onTap: () {
+                                context.push('/cadastro');
+                              },
+                              child: Text(
+                                "Esqueci minha senha",
+                                style: TextStyle(
+                                  color: AppTheme.lightTheme.colorScheme.secondary,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: AppTheme.lightTheme.colorScheme.secondary,
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
-                      ),
-                      Builder(
-                        builder: (context) {
-                          return ElevatedButton(
-                            onPressed: () {
-                              context.push('/cadastro');
-                            },
-                            child: Text('Cadastrar'),
-                          );
-                        },
                       ),
                     ],
                   ),
@@ -176,6 +181,40 @@ class _SignInPageState extends State<SignInPage> with ValidationMixinClass {
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+      extendBody: true,
+      bottomNavigationBar: SizedBox(
+        height: 100,
+        child: Center(
+          child: GestureDetector(
+            onTap: () {
+              context.push('/cadastro');
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 5,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Não tem um login?',
+                  style: TextStyle(
+                    color: AppTheme.lightTheme.colorScheme.surface,
+                    fontSize: TextTheme.of(context).titleMedium!.fontSize,
+                  ),
+                ),
+                Text(
+                  'Cadastre-se',
+                  style: TextStyle(
+                    color: AppTheme.lightTheme.colorScheme.secondary,
+                    fontSize: TextTheme.of(context).titleMedium!.fontSize,
+                    decoration: TextDecoration.underline,
+                    decorationColor: AppTheme.lightTheme.colorScheme.secondary,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
