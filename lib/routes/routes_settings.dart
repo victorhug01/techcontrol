@@ -13,17 +13,15 @@ class RoutersApp {
       final isLoggingIn = state.matchedLocation == '/login';
       final isSigningUp = state.matchedLocation == '/cadastro';
 
-      // Se a sessão ainda está carregando, não faz nada (evita redirecionamento prematuro)
       if (session == null && !isLoggingIn && !isSigningUp) {
         return '/login';
       }
 
-      // Se o usuário está logado e tenta acessar login ou cadastro, redireciona para home
       if (session != null && (isLoggingIn || isSigningUp)) {
         return '/home';
       }
 
-      return null; // Permite navegação normal
+      return null;
     },
 
     routes: <RouteBase>[
