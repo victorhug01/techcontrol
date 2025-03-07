@@ -27,31 +27,27 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
+  bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) return;
 
-    // Verifica se a localização está ativada
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return;
-    }
+  LocationPermission permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.deniedForever) return;
+  }
 
-    // Verifica a permissão do usuário
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.deniedForever) {
-        return;
-      }
-    }
-
-    // Obtém a posição atual
-    Position position = await Geolocator.getCurrentPosition();
+  Position position = await Geolocator.getCurrentPosition();
+  
+  LatLng newPosition = LatLng(position.latitude, position.longitude);
+  
+  if (newPosition != _currentPosition) {
     setState(() {
-      _currentPosition = LatLng(position.latitude, position.longitude);
-      _mapController.move(_currentPosition, 15.0); // Move o mapa para a localização
+      _currentPosition = newPosition;
+      _mapController.move(_currentPosition, 15.0);
     });
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -88,17 +84,13 @@ class _HomePageState extends State<HomePage> {
       ),
       body: SafeArea(
         child: FlutterMap(
-          mapController: _mapController, // ✅ Agora o mapa tem um controlador
+          mapController: _mapController,
           options: MapOptions(
-            initialCenter: _currentPosition, // ✅ Define o centro inicial
+            initialCenter: _currentPosition,
             initialZoom: 13.0,
             minZoom: 5.0,
             maxZoom: 20.0,
-            onPositionChanged: (mapPosition, hasGesture) {
-              if (hasGesture) {
-                print("Novo zoom: ${mapPosition.zoom}");
-              }
-            },
+            backgroundColor: AppTheme.lightTheme.colorScheme.primary,
           ),
           children: [
             TileLayer(
@@ -107,7 +99,8 @@ class _HomePageState extends State<HomePage> {
               userAgentPackageName: 'unknow',
               tileDisplay: TileDisplay.fadeIn(),
               minZoom: 5,
-              maxZoom: 20,
+              maxZoom: 18,
+              retinaMode: true,
             ),
             MarkerLayer(
               markers: [
