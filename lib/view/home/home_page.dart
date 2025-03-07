@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
@@ -51,8 +52,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final String apiKey = "iYIAzn2GA4clGsdVIFk2wpHa7krLKLca";
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -95,12 +94,11 @@ class _HomePageState extends State<HomePage> {
           children: [
             TileLayer(
               urlTemplate:
-                  'https://api.tomtom.com/map/1/tile/basic/main/{z}/{x}/{y}.png?key=$apiKey', // ✅ Corrigido para usar {z}/{x}/{y}
+                  'https://api.tomtom.com/map/1/tile/basic/main/{z}/{x}/{y}.png?key=${dotenv.env['TOMTOM_MAPS_API_KEY']!}',
               userAgentPackageName: 'unknow',
               tileDisplay: TileDisplay.fadeIn(),
               minZoom: 5,
               maxZoom: 18,
-              retinaMode: true,
             ),
             MarkerLayer(
               markers: [
