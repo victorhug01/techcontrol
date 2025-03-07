@@ -2,6 +2,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven { url = uri("https://maven.tomtom.com:8443/nexus/content/groups/releases/") }
     }
 }
 

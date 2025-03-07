@@ -5,7 +5,7 @@ import 'package:techcontrol/services/supabase_service.dart';
 import 'package:techcontrol/view/auth/signin/sign_in_page.dart';
 import 'package:techcontrol/view/auth/signup/sign_up_page.dart';
 import 'package:techcontrol/view/connectivity/connectivity_page.dart';
-import 'package:techcontrol/view/home/home_page.dart';
+import 'package:techcontrol/view/map/maps_page.dart';
 
 class RoutersApp {
   final GoRouter routesConfig = GoRouter(
@@ -48,7 +48,7 @@ class RoutersApp {
         path: '/home',
         name: 'home',
         builder: (BuildContext context, GoRouterState state) {
-          return const HomePage();
+          return const MapsPageSdk();
         },
       ),
       GoRoute(
