@@ -17,7 +17,7 @@ class SignInViewModel extends ChangeNotifier {
 
       if (response.session != null) {
         if (context.mounted) {
-          context.go('/home');
+          context.go('/navigation_screens');
         }
       } else {
         throw Exception("Falha ao autenticar");

@@ -5,7 +5,7 @@ import 'package:techcontrol/services/supabase_service.dart';
 import 'package:techcontrol/view/auth/signin/sign_in_page.dart';
 import 'package:techcontrol/view/auth/signup/sign_up_page.dart';
 import 'package:techcontrol/view/connectivity/connectivity_page.dart';
-import 'package:techcontrol/view/home/home_page.dart';
+import 'package:techcontrol/view/navigation_home/home_navigation.dart';
 
 class RoutersApp {
   final GoRouter routesConfig = GoRouter(
@@ -25,7 +25,7 @@ class RoutersApp {
       }
 
       if (session != null && (isLoggingIn || isSigningUp)) {
-        return '/home';
+        return '/navigation_screens';
       }
 
       return null;
@@ -45,10 +45,10 @@ class RoutersApp {
         builder: (BuildContext context, GoRouterState state) => SignUpPage(),
       ),
       GoRoute(
-        path: '/home',
-        name: 'home',
+        path: '/navigation_screens',
+        name: 'navigation_screens',
         builder: (BuildContext context, GoRouterState state) {
-          return const HomePage();
+          return const NavigationHomeScreens();
         },
       ),
       GoRoute(
