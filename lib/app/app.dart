@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:techcontrol/app/theme.dart';
 import 'package:techcontrol/main.dart';
 import 'package:techcontrol/routes/routes_settings.dart';
+import 'package:techcontrol/viewmodel/chat_viewmodel.dart';
 import 'package:techcontrol/viewmodel/sign_in_viewmodel.dart';
 import 'package:techcontrol/viewmodel/sign_out_viewmodel.dart';
 import 'package:techcontrol/viewmodel/sign_up_viewmodel.dart';
@@ -43,6 +44,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => SignUpViewModel()),
         ChangeNotifierProvider(create: (_) => SignInViewModel()),
         ChangeNotifierProvider(create: (_) => SignOutViewModel()),
+        ChangeNotifierProvider(create: (_) => ChatViewModel()),
       ],
       child: MaterialApp.router(
         title: 'TechControl',

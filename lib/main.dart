@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:techcontrol/app/app.dart';
@@ -19,6 +20,7 @@ Future<void> main() async {
   ).hasConnection;
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
+  Gemini.init(apiKey: dotenv.env['GEMINI_API_KEY']!);
   await Supabase.initialize(
     url: dotenv.env['SUPABASE_URL_DATABASE']!,
     anonKey: dotenv.env['SUPABASE_API_KEY_SECRET']!,
