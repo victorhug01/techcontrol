@@ -128,7 +128,7 @@ class _SignInPageState extends State<SignInPage> with ValidationMixinClass {
                             alignment: Alignment.topRight,
                             child: GestureDetector(
                               onTap: () {
-                                context.push('/cadastro');
+                                context.push('/email_for_reset');
                               },
                               child: Text(
                                 "Esqueci minha senha",

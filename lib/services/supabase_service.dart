@@ -11,6 +11,14 @@ class SupabaseService {
     return supabase.auth.signUp(password: password, email: email);
   }
 
+  Future emailResetPassword(String email) {
+    return supabase.auth.resetPasswordForEmail(email);
+  }
+
+  Future verifyOTP(String codeOPT, String email) {
+    return supabase.auth.verifyOTP(email: email, token: codeOPT, type: OtpType.recovery);
+  }
+
   Future<void> signOut() async {
     await supabase.auth.signOut();
   }

@@ -29,45 +29,53 @@ class ChatViewModel extends ChangeNotifier {
     );
   }
 
-  void sendMessage(ChatMessage chatMessage) {
-    _messages = [chatMessage, ..._messages];
-    notifyListeners();
-
-    _setThinking(true);
-
-    List<Uint8List>? images;
-    if (chatMessage.medias?.isNotEmpty ?? false) {
-      images = [File(chatMessage.medias!.first.url).readAsBytesSync()];
-    }
-
-    String accumulatedResponse = '';
-    _chatService.sendMessage(chatMessage.text, images).listen((event) {
-  String response = event!.content?.parts
-          ?.whereType<TextPart>()
-          .map((part) => part.text.trim())
-          .join(' ') ?? ""; // Usando um espaço para separar as partes
-
-  // Substituindo cada ponto por ponto seguido de uma quebra de linha
-  response = response.replaceAll('.', '.\n');
-
-  accumulatedResponse += response;
-
-  // Atualiza a mensagem com a resposta acumulada
-  _messages = [
-    ChatMessage(
-      user: geminiUser,
-      createdAt: DateTime.now(),
-      text: accumulatedResponse,
-    ),
-    ..._messages.where((msg) => msg.user.id != geminiUser.id),
-  ];
-
+void sendMessage(ChatMessage chatMessage) {
+  _messages = [chatMessage, ..._messages];
   notifyListeners();
-}, onDone: () {
-  _setThinking(false);
-});
 
+  _setThinking(true);
+
+  List<Uint8List>? images;
+  if (chatMessage.medias?.isNotEmpty ?? false) {
+    images = [File(chatMessage.medias!.first.url).readAsBytesSync()];
   }
+
+  // Criar uma mensagem temporária do Gemini
+  ChatMessage thinkingMessage = ChatMessage(
+    user: geminiUser,
+    createdAt: DateTime.now(),
+    text: "Pensando... 🤔",
+  );
+
+  _messages = [thinkingMessage, ..._messages];
+  notifyListeners();
+
+  // Índice da mensagem do Gemini que será atualizada
+  int geminiMessageIndex = 0;
+
+  _chatService.sendMessage(chatMessage.text, images).listen((event) {
+    String response = event!.content?.parts
+            ?.whereType<TextPart>()
+            .map((part) => part.text.trim())
+            .join(' ') ?? "";
+
+    response = response.replaceAll('.', '.\n');
+
+    // Atualiza a resposta dentro da mensagem existente do Gemini
+    _messages[geminiMessageIndex] = ChatMessage(
+      user: geminiUser,
+      createdAt: _messages[geminiMessageIndex].createdAt,
+      text: _messages[geminiMessageIndex].text == "Pensando... 🤔"
+          ? response
+          : "${_messages[geminiMessageIndex].text} $response",
+    );
+
+    notifyListeners();
+  }, onDone: () {
+    _setThinking(false);
+  });
+}
+
 
   Future<void> pickAndSendMedia(MediaType mediaType) async {
     XFile? file;

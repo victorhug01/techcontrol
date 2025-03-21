@@ -7,9 +7,11 @@ import 'package:techcontrol/app/theme.dart';
 import 'package:techcontrol/main.dart';
 import 'package:techcontrol/routes/routes_settings.dart';
 import 'package:techcontrol/viewmodel/chat_viewmodel.dart';
+import 'package:techcontrol/viewmodel/email_reset_password_viewmodel.dart';
 import 'package:techcontrol/viewmodel/sign_in_viewmodel.dart';
 import 'package:techcontrol/viewmodel/sign_out_viewmodel.dart';
 import 'package:techcontrol/viewmodel/sign_up_viewmodel.dart';
+import 'package:techcontrol/viewmodel/verify_opt_viewmodel.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -45,6 +47,8 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => SignInViewModel()),
         ChangeNotifierProvider(create: (_) => SignOutViewModel()),
         ChangeNotifierProvider(create: (_) => ChatViewModel()),
+        ChangeNotifierProvider(create: (_) => EmailForResetPasswordViewModel()),
+        ChangeNotifierProvider(create: (_) => VerifyOTPViewModel()),
       ],
       child: MaterialApp.router(
         title: 'TechControl',

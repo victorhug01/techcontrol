@@ -29,8 +29,11 @@ class _SignUpPageState extends State<SignUpPage> with ValidationMixinClass {
     final responsive = ResponsiveUtils(context).height;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppTheme.lightTheme.colorScheme.secondary,
-        iconTheme: IconThemeData(color: AppTheme.lightTheme.colorScheme.primary),
+        elevation: 0,
+        backgroundColor: AppTheme.lightTheme.colorScheme.primary,
+        iconTheme: IconThemeData(
+          color: AppTheme.lightTheme.colorScheme.surface,
+        ),
       ),
       backgroundColor: AppTheme.lightTheme.primaryColor,
       body: SafeArea(

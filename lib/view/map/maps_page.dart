@@ -24,26 +24,29 @@ class _MapsPageState extends State<MapsPage> {
   }
 
   Future<void> _determinePosition() async {
-  bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  if (!serviceEnabled) return;
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) return;
 
-  LocationPermission permission = await Geolocator.checkPermission();
-  if (permission == LocationPermission.denied) {
-    permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.deniedForever) return;
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.deniedForever) return;
+    }
+
+    Position position = await Geolocator.getCurrentPosition();
+
+    LatLng newPosition = LatLng(position.latitude, position.longitude);
+
+    if (newPosition != _currentPosition) {
+      if (mounted) {
+        setState(() {
+          _currentPosition = newPosition;
+          _mapController.move(_currentPosition, 15.0);
+        });
+      }
+    }
   }
 
-  Position position = await Geolocator.getCurrentPosition();
-  
-  LatLng newPosition = LatLng(position.latitude, position.longitude);
-  
-  if (newPosition != _currentPosition) {
-    // setState(() {
-    //   _currentPosition = newPosition;
-    //   _mapController.move(_currentPosition, 15.0);
-    // });
-  }
-}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
