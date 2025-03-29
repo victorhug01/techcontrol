@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:techcontrol/app/theme.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class MapsPage extends StatefulWidget {
   const MapsPage({super.key});
@@ -13,72 +9,38 @@ class MapsPage extends StatefulWidget {
 }
 
 class _MapsPageState extends State<MapsPage> {
-  late MapController _mapController;
-  LatLng _currentPosition = LatLng(0, 0);
+ late  WebViewController controller;
 
   @override
   void initState() {
     super.initState();
-    _mapController = MapController();
-    _determinePosition();
-  }
-
-  Future<void> _determinePosition() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) return;
-
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.deniedForever) return;
-    }
-
-    Position position = await Geolocator.getCurrentPosition();
-
-    LatLng newPosition = LatLng(position.latitude, position.longitude);
-
-    if (newPosition != _currentPosition) {
-      if (mounted) {
-        setState(() {
-          _currentPosition = newPosition;
-          _mapController.move(_currentPosition, 15.0);
-        });
-      }
-    }
+    controller = WebViewController()
+  ..setJavaScriptMode(JavaScriptMode.unrestricted)
+  ..setNavigationDelegate(
+    NavigationDelegate(
+      onProgress: (int progress) {
+        // Update loading bar.
+      },
+      onPageStarted: (String url) {},
+      onPageFinished: (String url) {},  
+      onHttpError: (HttpResponseError error) {},
+      onWebResourceError: (WebResourceError error) {},
+      onNavigationRequest: (NavigationRequest request) {
+        if (request.url.startsWith('https://www.youtube.com/')) {
+          return NavigationDecision.prevent;
+        }
+        return NavigationDecision.navigate;
+      },
+    ),
+  )
+  ..loadRequest(Uri.parse('https://www.google.com/maps/dir/Rua+Paulo+Centrone,+340+-+Jardim+America,+Mar%C3%ADlia+-+SP/Av.+Independ%C3%AAncia,+243+-+Mar%C3%ADlia,+SP/@-22.2077059,-49.9609513,16z/data=!3m1!4b1!4m13!4m12!1m5!1m1!1s0x94bfd6e32289b167:0x720386224a972036!2m2!1d-49.9662177!2d-22.2040141!1m5!1m1!1s0x94bfd7303b0d7551:0xf7d9032f17817001!2m2!1d-49.9452923!2d-22.2114177?entry=ttu&g_ep=EgoyMDI1MDMyNS4xIKXMDSoASAFQAw%3D%3D'));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: FlutterMap(
-          mapController: _mapController,
-          options: MapOptions(
-            initialCenter: _currentPosition,
-            initialZoom: 13.0,
-            minZoom: 5.0,
-            maxZoom: 20.0,
-            backgroundColor: AppTheme.lightTheme.colorScheme.primary,
-          ),
-          children: [
-            TileLayer(
-              urlTemplate:
-                  'https://api.tomtom.com/map/1/tile/basic/main/{z}/{x}/{y}.png?key=${dotenv.env['TOMTOM_MAPS_API_KEY']!}',
-              userAgentPackageName: 'unknow',
-              tileDisplay: TileDisplay.fadeIn(),
-              minZoom: 5,
-              maxZoom: 18,
-            ),
-            MarkerLayer(
-              markers: [
-                Marker(
-                  point: _currentPosition,
-                  child: const Icon(Icons.location_on, color: Colors.red, size: 40),
-                ),
-              ],
-            ),
-          ],
-        ),
+        child: WebViewWidget(controller: controller),
       ),
     );
   }

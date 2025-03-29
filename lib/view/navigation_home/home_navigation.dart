@@ -34,6 +34,7 @@ class _NavigationHomeScreensState extends State<NavigationHomeScreens> {
     return Scaffold(
       extendBody: true,
       body: PageView(
+        physics: initialPage == 1 ? NeverScrollableScrollPhysics() : ScrollPhysics(),
         controller: pagecontroller,
         onPageChanged: setActualPage,
         children: [

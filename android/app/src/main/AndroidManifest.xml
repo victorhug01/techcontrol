@@ -6,6 +6,7 @@
     <uses-feature android:name="android.hardware.location.gps"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <application
+        android:usesCleartextTraffic="true"
         android:label="techcontrol"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
