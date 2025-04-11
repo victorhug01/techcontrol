@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:techcontrol/app/theme.dart';
-import 'package:techcontrol/helpers/responsive_utils.dart';
 import 'package:techcontrol/model/sign_out_model.dart';
+import 'package:techcontrol/services/supabase_service.dart';
 import 'package:techcontrol/viewmodel/sign_out_viewmodel.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,13 +14,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final supabase = SupabaseService();
   @override
   Widget build(BuildContext context) {
-    final responsive = ResponsiveUtils(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: const Text("Home"),
         actions: [
           IconButton(
             icon: const Icon(Icons.exit_to_app),
@@ -46,17 +45,8 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Center(
-            child: Text('Home Page'),
-          ),
-          SizedBox(
-            height: 600,
-            width: responsive.width / 1.2,
-            child: Card(),
-          ),
-        ],
+      body: Center(
+        child: Text('Bem-vindo(a)'),
       ),
     );
   }

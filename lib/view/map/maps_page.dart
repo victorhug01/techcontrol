@@ -43,10 +43,12 @@ class _MapsPageState extends State<MapsPage> {
         });
         await _openRouteInMaps();
       } catch (e) {
-        setState(() {
-          _isLoading = false;
-          _currentLocation = const LatLng(-22.2040141, -49.9662177);
-        });
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+            _currentLocation = const LatLng(-22.2040141, -49.9662177);
+          });
+        }
         _loadMapUrl();
       }
     } else {
@@ -120,7 +122,6 @@ class _MapsPageState extends State<MapsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Navegação'),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),

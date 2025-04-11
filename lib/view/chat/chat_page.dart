@@ -12,6 +12,13 @@ class ChatPage extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => ChatViewModel(),
       child: Scaffold(
+        appBar: AppBar(
+          leading: CircleAvatar(
+            backgroundColor: Colors.transparent,
+            backgroundImage: NetworkImage('https://static.vecteezy.com/system/resources/previews/046/861/646/non_2x/gemini-icon-on-a-transparent-background-free-png.png'),
+          ),
+          title: Text('Gemini'),
+        ),
         body: Consumer<ChatViewModel>(
           builder: (context, viewModel, child) {
             return DashChat(
