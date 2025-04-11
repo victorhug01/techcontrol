@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:techcontrol/app/theme.dart';
+import 'package:techcontrol/helpers/responsive_utils.dart';
 import 'package:techcontrol/model/sign_out_model.dart';
 import 'package:techcontrol/viewmodel/sign_out_viewmodel.dart';
 
@@ -15,6 +16,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    final responsive = ResponsiveUtils(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -44,8 +46,17 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: Center(
-        child: Text('Home Page'),
+      body: Column(
+        children: [
+          Center(
+            child: Text('Home Page'),
+          ),
+          SizedBox(
+            height: 600,
+            width: responsive.width / 1.2,
+            child: Card(),
+          ),
+        ],
       ),
     );
   }
