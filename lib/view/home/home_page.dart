@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
@@ -46,7 +47,24 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: Center(
-        child: Text('Bem-vindo(a)'),
+        child: Column(
+          children: [
+            Text('Bem-vindo(a)'),
+            ElevatedButton(
+              onPressed: () {
+                context.goNamed(
+                  'notification-screen',
+                  extra: RemoteMessage(
+                    // simula uma notificação
+                    notification: RemoteNotification(title: 'Test', body: 'Corpo'),
+                    data: {'key': 'value'},
+                  ),
+                );
+              },
+              child: Text('Ir para notificação'),
+            ),
+          ],
+        ),
       ),
     );
   }

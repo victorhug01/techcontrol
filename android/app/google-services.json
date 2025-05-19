@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "965262756659",
+    "project_id": "techcontrol-5b941",
+    "storage_bucket": "techcontrol-5b941.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:965262756659:android:cb36b3272dc4732b670c46",
+        "android_client_info": {
+          "package_name": "com.techcontrol"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDboyafPOE88hB0KdY7uqo6kZqnLh0OX4k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

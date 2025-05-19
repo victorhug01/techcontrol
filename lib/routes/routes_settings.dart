@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:techcontrol/main.dart';
@@ -9,9 +10,12 @@ import 'package:techcontrol/view/auth/signup/sign_up_page.dart';
 import 'package:techcontrol/view/auth/verify_otp/verify_otp_page.dart';
 import 'package:techcontrol/view/connectivity/connectivity_page.dart';
 import 'package:techcontrol/view/navigation_home/home_navigation.dart';
+import 'package:techcontrol/view/notification/navigator_key.dart';
+import 'package:techcontrol/view/notification/notification.dart';
 
 class RoutersApp {
-  final GoRouter routesConfig = GoRouter(
+  late final GoRouter routesConfig = GoRouter(
+    navigatorKey: navigatorKey,
     initialLocation: '/login',
     redirect: (context, state) {
       final session = SupabaseService().currentUser;
@@ -81,6 +85,14 @@ class RoutersApp {
         builder: (BuildContext context, GoRouterState state) {
           final email = state.extra as String? ?? ''; // Recupera o email do extra
           return VerifyOTPPage(email: email);
+        },
+      ),
+      GoRoute(
+        path: '/notification-screen',
+        name: 'notification-screen',
+        builder: (BuildContext context, GoRouterState state) {
+          final data = state.extra as RemoteMessage;
+          return NotificationScreen(message: data);
         },
       ),
     ],

@@ -1,9 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:techcontrol/app/app.dart';
+import 'package:techcontrol/firebase_options.dart';
+import 'package:techcontrol/services/firebase_messaging_service.dart';
 
 class ConnectionNotifier extends InheritedNotifier<ValueNotifier<bool>> {
   const ConnectionNotifier({super.key, required super.notifier, required super.child});
@@ -19,6 +22,10 @@ Future<void> main() async {
     checkInterval: const Duration(seconds: 1),
   ).hasConnection;
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform
+  );
+  await FirebaseMessagingService().initNotifications();
   await dotenv.load(fileName: ".env");
   Gemini.init(apiKey: dotenv.env['GEMINI_API_KEY']!);
   await Supabase.initialize(
