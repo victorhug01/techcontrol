@@ -13,9 +13,12 @@ class NavigationHomeScreens extends StatefulWidget {
   State<NavigationHomeScreens> createState() => _NavigationHomeScreensState();
 }
 
-class _NavigationHomeScreensState extends State<NavigationHomeScreens> {
+class _NavigationHomeScreensState extends State<NavigationHomeScreens> with AutomaticKeepAliveClientMixin{
   int initialPage = 2;
   late PageController pagecontroller;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -31,6 +34,7 @@ class _NavigationHomeScreensState extends State<NavigationHomeScreens> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       extendBody: true,
       body: PageView(

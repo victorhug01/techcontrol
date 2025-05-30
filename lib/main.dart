@@ -7,6 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:techcontrol/app/app.dart';
 import 'package:techcontrol/firebase_options.dart';
 import 'package:techcontrol/services/firebase_messaging_service.dart';
+import 'package:techcontrol/services/local_notification_service.dart';
 
 class ConnectionNotifier extends InheritedNotifier<ValueNotifier<bool>> {
   const ConnectionNotifier({super.key, required super.notifier, required super.child});
@@ -25,7 +26,9 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
   );
-  await FirebaseMessagingService().initNotifications();
+  await LocalNotificationService.initialize();
+  final messagingService = FirebaseMessagingService();
+  await messagingService.initNotifications();
   await dotenv.load(fileName: ".env");
   Gemini.init(apiKey: dotenv.env['GEMINI_API_KEY']!);
   await Supabase.initialize(

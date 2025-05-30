@@ -9,13 +9,17 @@ class WorkPage extends StatefulWidget {
   State<WorkPage> createState() => _WorkPageState();
 }
 
-class _WorkPageState extends State<WorkPage> {
+class _WorkPageState extends State<WorkPage> with AutomaticKeepAliveClientMixin{
   final _future = Supabase.instance.client.from('client').select();
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       backgroundColor: AppTheme.lightTheme.primaryColor,
       body: SafeArea(

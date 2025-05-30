@@ -2,12 +2,12 @@ import 'dart:developer';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:go_router/go_router.dart';
 import 'package:techcontrol/view/notification/navigator_key.dart';
-
+import 'local_notification_service.dart';
 
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
-  log('Background Message Title: ${message.notification?.title}');
-  log('Background Message Body: ${message.notification?.body}');
-  log('Background Message Data: ${message.data}');
+  log('Background Title: ${message.notification?.title}');
+  log('Background Body: ${message.notification?.body}');
+  log('Background Data: ${message.data}');
 }
 
 class FirebaseMessagingService {
@@ -18,10 +18,9 @@ class FirebaseMessagingService {
 
     final context = navigatorKey.currentContext;
     if (context != null) {
-      // Navega usando GoRouter para a rota de notificação passando o RemoteMessage no extra
       GoRouter.of(context).push('/notification-screen', extra: message);
     } else {
-      log('Contexto do navigatorKey está nulo, não foi possível navegar.');
+      log('NavigatorKey sem contexto, não foi possível navegar.');
     }
   }
 
@@ -32,21 +31,22 @@ class FirebaseMessagingService {
       sound: true,
     );
 
-    // Quando o app está fechado (cold start) e é aberto pela notificação
-    FirebaseMessaging.instance.getInitialMessage().then(handleMessage);
+    // Foreground: mostra notificação local
+    FirebaseMessaging.onMessage.listen((message) {
+      LocalNotificationService.showNotification(message);
+    });
 
-    // Quando o app está em background e o usuário clica na notificação
-    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
-
-    // Mensagens recebidas em background
-    FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
+    FirebaseMessaging.instance.getInitialMessage().then(handleMessage); // cold start
+    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage); // background
+    FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage); // background isolado
   }
 
   Future<void> initNotifications() async {
     await _firebaseMessaging.requestPermission();
 
-    final fCMToken = await _firebaseMessaging.getToken();
-    log('FCM Token: $fCMToken');
+    final fcmToken = await _firebaseMessaging.getToken();
+    log('FCM Token: $fcmToken');
+    print('FCM Token: $fcmToken');
 
     await initPushNotifications();
   }
